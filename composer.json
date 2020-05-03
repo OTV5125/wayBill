@@ -1,0 +1,20 @@
+{
+  "authors": [
+    {
+      "name": "Nilov Mikhail",
+      "email": "OTV5125@gmail.com",
+      "homepage": "https://nilov.online",
+      "role": "Developer"
+    }
+  ],
+
+  "autoload": {
+    "psr-4": {
+      "Service\\": "service/"
+    }
+  },
+
+  "require": {
+    "phpoffice/phpspreadsheet": "1.1.*"
+  }
+}

@@ -1,0 +1,83 @@
+
+{
+    margin: 0;
+    padding: 0;
+}
+
+body {
+	font-family: 'Harmonia Sans', sans-serif;
+	height: 100%;
+	color: white;
+	font-size: 20px;	
+	background-image: url(Flat-Mountains.svg); 
+	background-size: cover;
+}
+
+h1 {
+	font-size: 24px;
+	margin: 20px;
+	color: black;
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: row;
+}
+
+.wrapper-items:nth-child(2) {
+	margin-left: 40px;
+}
+
+.wrapper-items {
+	display: flex;
+	flex-direction: column;	
+}
+
+.petrol-list {
+	position: relative;
+	display: inline-block;
+	width: auto;
+	margin-top: 20px;
+	margin-left: 20px;
+	background-color: rgba(97, 56, 224, 0.7);
+	border-radius: 5px;
+	padding: 10px;
+}
+
+.selectRoutes {
+	display: inline-block;
+	margin-top: 40px;
+	margin-left: 20px;
+	background-color: rgba(97, 56, 224, 0.7);
+	border-radius: 5px;
+	padding: 10px;
+}
+
+.title {
+	font-weight: bold;
+	margin-bottom: 15px; 
+}
+
+.input-selectRoutes {
+ 	width: 150px;
+	font-size: 13px;
+	padding: 6px 0 4px 10px;
+	border: 1px solid #cecece;
+	background: #F6F6f6;
+	border-radius: 5px;
+	font-family: 'Harmonia Sans', sans-serif;
+}
+
+select {
+	width: 120px;
+	font-size: 13px;
+	padding: 6px 0 4px 10px;
+	border: 1px solid #cecece;
+	background: #F6F6f6;
+	border-radius: 5px;
+}
+
+.checkbox-list{
+	text-align: left;
+	margin-bottom: 5px;
+}
