@@ -1,0 +1,4 @@
+.idea/
+/vendor
+db_cfg.php
+arr
