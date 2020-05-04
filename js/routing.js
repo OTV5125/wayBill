@@ -2,7 +2,7 @@
 
     let Routing = function (classNode, balance, routes) {
         this.init(classNode);
-        new Block(classNode, balance, routes);
+        this.block = new Block(classNode, balance, routes);
     };
 
     Routing.prototype = {
@@ -11,12 +11,14 @@
         init: function (classNode) {
             $('.save').on('click', this.buttonSave.bind(this, classNode));
             // $('.add-route').off('click', this.buttonAddRoute);
-            $('.add-route').on('click', this.buttonAddRoute.bind(this, classNode));
+            $('.block-1 .add-route').on('click', this.buttonAddRoute.bind(this, classNode));
+            $('.block-2 .add-route').on('click', this.buttonAddRoute2.bind(this, '.block-2'));
         },
 
         buttonSave: function (classNode) {
+            console.log(this.block.getBalance())
             let block =  $(classNode);
-            // Работа со стилями
+            this.block = new Block('.block-2', {id: 1, balance: 1, last_date: "15-05-2020", mileage: 128487, number_list: 1});
             block.css('pointer-events', 'none');
             block.find('.add-route').remove();
             block.find('.save').remove();
@@ -29,6 +31,13 @@
         buttonAddRoute: function (classNode) {
             let block =  $(classNode).find('.checkbox-list-items').first();
             block.clone().appendTo(classNode+' .checkbox-list');
+            this.block.selectRoute();
+        },
+
+        buttonAddRoute2: function (classNode) {
+            let block =  $(classNode).find('.checkbox-list-items').first();
+            block.clone().appendTo(classNode+' .checkbox-list');
+            this.block.selectRoute();
         }
 
 

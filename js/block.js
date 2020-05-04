@@ -93,7 +93,10 @@
 
 
         selectRoute: function () {
-            this.selectRoutes.find('select').change(function(){
+            this.selectRoutes.find('select').off('change', function(){
+                this.recountKm();
+            }.bind(this));
+            this.selectRoutes.find('select').on('change', function(){
                 this.recountKm();
             }.bind(this));
         },
@@ -110,7 +113,7 @@
             }
             let sumKm = this.sumKm - sum;
             this.newMileage.text(Number(this.oldMileage.val()) + sum);
-            this.restKm.text(sumKm);
+            this.restKm.text(Math.round10(sumKm, -2));
             this.finishDayPetrol.text(Math.round10(Number(sumKm) * 0.11, -2));
             if(sumKm < 0){
                 this.error.newKm = 1;
@@ -118,6 +121,10 @@
             }else{
                 this.error.newKm = 0;
             }
+        },
+
+        getBalance: function () {
+            return {id: 1, balance: this.finishDayPetrol.text(), last_date: this.lastDatePetrol.text(), mileage: this.newMileage.text(), number_list: Number(this.numberList.val()) + 1}
         }
     }
 
