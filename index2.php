@@ -69,14 +69,16 @@ $balance = $mysql->getBalance();
                 <br>
                 <input type="date" class="input-select-routes new-date-list"> Дата путевого листа<br><br>
                 <div class="checkbox-list">
-                    <select>
-                        <option data-id="0">не выбрано</option>
-                        <?php foreach ($routes AS $route): ?>
-                            <option data-id="<?= $route[0] ?>" data-km="<?= $route[3] ?>"><?= $route[1] ?>
-                                - <?= $route[2] ?> (<?= $route[3] ?>км)
-                            </option>
-                        <?php endforeach; ?>
-                    </select> <input type="checkbox"> в обратную сторону
+                    <div class="checkbox-list-items">
+                        <select>
+                            <option data-id="0">не выбрано</option>
+                            <?php foreach ($routes AS $route): ?>
+                                <option data-id="<?= $route[0] ?>" data-km="<?= $route[3] ?>"><?= $route[1] ?>
+                                    - <?= $route[2] ?> (<?= $route[3] ?>км)
+                                </option>
+                            <?php endforeach; ?>
+                        </select> <input type="checkbox"> в обратную сторону
+                    </div>
                 </div>
                 <button class="add-route">Добавить маршрут</button>
                 <button class="save">сохранить</button>

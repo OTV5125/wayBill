@@ -92,7 +92,12 @@ select {
 	border-radius: 5px;
 }
 
-.checkbox-list{
+.checkbox-list {
 	text-align: left;
 	margin-bottom: 5px;
+}
+
+.checkbox-list-items {
+	margin-bottom: 5px;
+	vertical-align: center;
 }
