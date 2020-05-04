@@ -28,12 +28,24 @@ class MysqlSelect extends Mysql
         return $arr;
     }
 
-    public function getRoutesToDoc($data){
+    public function getRoutesToDoc($blocks){
+
+        $error = [];
         $sql = "SELECT id, route_id_1, route_id_2, distance FROM routes WHERE id = :id";
-            $result = $this->exec($sql, ['id' => $data[0]])->fetchAll()[0];
-            $route1= $this->exec("SELECT name FROM route WHERE id = {$result['route_id_1']}", [])->fetchColumn();
-            $route2= $this->exec("SELECT name FROM route WHERE id = {$result['route_id_2']}", [])->fetchColumn();
-            return ($data[1] == 'false')?[$route1, $route2, $result['distance']]:[$route2, $route1, $result['distance']];
+        foreach ($blocks as $i => $block) {
+            foreach ($block['list2'] AS $iBLock => $item){
+                $result = $this->exec($sql, ['id' => $item[0]])->fetchAll()[0];
+                if(empty($result)){
+                    if(!isset($error['routes'])) $error['routes']['message'] = 'routes not found from database';
+                    $error['routes']['id'][] = $item;
+                }else{
+                    $route1= $this->exec("SELECT name FROM route WHERE id = {$result['route_id_1']}", [])->fetchColumn();
+                    $route2= $this->exec("SELECT name FROM route WHERE id = {$result['route_id_2']}", [])->fetchColumn();
+                    $blocks[$i]['list2'][$iBLock]  = ($blocks[1] == 'false')?[$route1, $route2, $result['distance']]:[$route2, $route1, $result['distance']];
+                }
+            }
+        }
+        return (empty($error))?['status' => 'success', 'blocks' => $blocks]:['status' => 'error', 'error' => $error];
     }
 
     public function updateBalance($param){
