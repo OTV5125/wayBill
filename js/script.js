@@ -127,17 +127,17 @@
                 if(this.error.newKm !== 0 || this.error.newDateList !== 0 || this.error.newOil !== 0){
                     alert('ошибка в заполнении формы');
                 }else{
-                    let arr = [];
+                    let list2 = [];
                     let select = $( ".block-1 .selectRoutes select option:selected" );
                     for(let i = 0; select.length > i; i++){
                         if(select[i].dataset.id > 0){
-                            arr.push([select[i].dataset.id, $(select[i]).parent().parent().find("input[type='checkbox']")[0].checked]);
+                            list2.push([select[i].dataset.id, $(select[i]).parent().parent().find("input[type='checkbox']")[0].checked]);
                         }
                     }
 
                     var date = $(this.classes.block1.newDate).val()
                     date = date.split('-') // => массив ["a","b","c"]
-                    let obj = {
+                    let list1 = {
                         BX4: 2,//number document
                         AD5: date[2], //day
                         AI5: date[1], //mount
@@ -158,11 +158,12 @@
                     // console.log('Осталось при выезде '+ obj.BT37);
                     // console.log('Осталось при возвращении '+ obj.BT38);
                     // console.log('Расход по норме '+ obj.BT39);
+                    let block1 = {list1: list1, list2: list2};
 
-
-                    this.ajax.postAjax('getDoc.php', {data: obj, routes: arr, dateInputOil: $(this.classes.block1.inpOilDate).val()}, function (result) {
-                        window.open('doc.xlsx');
+                    this.ajax.postAjax('getDoc.php', {block1: block1, dateInputOil: $(this.classes.block1.inpOilDate).val()}, function (result) {
+                        // window.open('doc.xlsx');
                         console.log(result)
+                        console.log(JSON.parse(result));
                     })
 
                 }
