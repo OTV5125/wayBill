@@ -55,7 +55,7 @@ h1 {
 }
 
 
-.selectRoutes {
+.select-routes {
 	display: inline-block;
 	margin-top: 40px;
 	margin-left: 20px;
@@ -69,7 +69,11 @@ h1 {
 	margin-bottom: 15px; 
 }
 
-.input-selectRoutes {
+/*.block-1 {*/
+/*	pointer-events: none;*/
+/*}*/
+
+.input-select-routes {
  	width: 150px;
 	font-size: 13px;
 	padding: 6px 0 4px 10px;

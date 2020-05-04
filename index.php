@@ -59,10 +59,10 @@
         <div class="selectRoutes">
         <span class="title">Первый путевой лист</span>
         <br><br>
-        <input type="number" class="input-selectRoutes input-oil" data-value="BT34"> Бензина залил <br><br>
-        <input type="date" class="input-selectRoutes input-oil-date"> Дата заправки<br>
+        <input type="number" class="input-select-routes input-oil" data-value="BT34"> Бензина залил <br><br>
+        <input type="date" class="input-select-routes input-oil-date"> Дата заправки<br>
         <br>
-        <input type="date" class="input-selectRoutes new-date" data-value="date"> Дата путевого листа<br><br>
+        <input type="date" class="input-select-routes new-date" data-value="date"> Дата путевого листа<br><br>
         <div class="checkbox-list">
             <select>
             <option data-id="0">не выбрано</option>
@@ -128,10 +128,10 @@
         <div class="selectRoutes">
         <span class="title">Первый путевой лист</span>
         <br><br>
-        <input type="number" class="input-selectRoutes" value=""> Бензина залил <br><br>
-        <input type="date" class="input-selectRoutes"> Дата заправки<br>
+        <input type="number" class="input-select-routes" value=""> Бензина залил <br><br>
+        <input type="date" class="input-select-routes"> Дата заправки<br>
         <br>
-        <input type="date" class="input-selectRoutes"> Дата путевого листа<br><br>
+        <input type="date" class="input-select-routes"> Дата путевого листа<br><br>
         <div class="checkbox-list">
             <select>
             <option data-id="0">не выбрано</option>
