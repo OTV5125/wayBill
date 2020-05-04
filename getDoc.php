@@ -9,18 +9,41 @@ require_once 'vendor/autoload.php';
 
 use Service\MysqlSelect;
 use Service\WayBill;
+use Service\Validate;
 
 
 $mysql = new MysqlSelect();
 $wayBill = new WayBill();
 
-$data = $_POST['data'];
-$routes = $_POST['routes'];
-$row[0] = ['list1' => $data];
-foreach ($routes as $route) {
-    $row[0]['list2'][] = $mysql->getRoutesToDoc($route);
+
+$blocks = [];
+
+if(isset($_POST['block1'])) $blocks[] = $_POST['block1'];
+else{
+    echo json_encode(['error' => 'not found block1']);
+    die;
 }
-$wayBill->creteWayBill($row);
+
+if(isset($_POST['block2'])) $blocks[] = $_POST['block2'];
+
+$validate = Validate::arrValidate($blocks);
+
+if($validate['status'] === 'error'){
+    echo json_encode($validate);
+    die;
+}
+
+$blocks = $mysql->getRoutesToDoc($blocks);
+if($blocks['status'] === 'error'){
+    echo json_encode($blocks);
+    die;
+}
+
+$blocks = $blocks['blocks'];
+$wayBill->creteWayBill($blocks);
+echo 'ok';
+die;
+
 
 $param = [
     'balance' => $data['BT38'],
