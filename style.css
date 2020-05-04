@@ -44,6 +44,17 @@ h1 {
 	padding: 10px;
 }
 
+.input-petrol-list {
+	width: 80px;
+	font-size: 13px;
+	padding: 6px 0 4px 10px;
+	border: 1px solid #cecece;
+	background: #F6F6f6;
+	border-radius: 5px;
+	font-family: 'Harmonia Sans', sans-serif;
+}
+
+
 .selectRoutes {
 	display: inline-block;
 	margin-top: 40px;
