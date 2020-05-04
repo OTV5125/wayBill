@@ -41,15 +41,14 @@ if($blocks['status'] === 'error'){
 
 $blocks = $blocks['blocks'];
 $wayBill->creteWayBill($blocks);
-echo 'ok';
-die;
+echo json_encode(['status' => 'success']);
 
 
-$param = [
-    'balance' => $data['BT38'],
-    'last_date' => $_POST['dateInputOil'],
-    'mileage' => $data['BT45']
-];
+//$param = [
+//    'balance' => $data['BT38'],
+//    'last_date' => $_POST['dateInputOil'],
+//    'mileage' => $data['BT45']
+//];
 
 $mysql->updateBalance($param);
 
