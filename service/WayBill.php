@@ -68,6 +68,7 @@ class WayBill{
 
         $objWriter = IOFactory::createWriter($excel, 'Xlsx');
         $objWriter->save('doc.xlsx');
+        return true;
     }
 
 }

@@ -22,6 +22,14 @@ foreach ($routes as $route) {
 }
 $wayBill->creteWayBill($row);
 
+$param = [
+    'balance' => $data['BT38'],
+    'last_date' => $_POST['dateInputOil'],
+    'mileage' => $data['BT45']
+];
+
+$mysql->updateBalance($param);
+
 die;
 $row2 = [
     0 => [

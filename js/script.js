@@ -160,7 +160,8 @@
                     // console.log('Расход по норме '+ obj.BT39);
 
 
-                    this.ajax.postAjax('getDoc.php', {data: obj, routes: arr}, function (result) {
+                    this.ajax.postAjax('getDoc.php', {data: obj, routes: arr, dateInputOil: $(this.classes.block1.inpOilDate).val()}, function (result) {
+                        window.open('doc.xlsx');
                         console.log(result)
                     })
 
