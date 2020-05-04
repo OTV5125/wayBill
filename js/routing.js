@@ -18,7 +18,7 @@
         buttonSave: function (classNode) {
             console.log(this.block.getBalance())
             let block =  $(classNode);
-            this.block = new Block('.block-2', {id: 1, balance: 1, last_date: "15-05-2020", mileage: 128487, number_list: 1});
+            this.block = new Block('.block-2', this.block.getBalance());
             block.css('pointer-events', 'none');
             block.find('.add-route').remove();
             block.find('.save').remove();
