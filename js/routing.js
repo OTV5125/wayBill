@@ -27,6 +27,7 @@
             block.find('.btnGetDoc1').remove();
             block.find('.petrol-list').css("background-color", "rgba(97, 56, 224, 0.5)");
             block.find('.select-routes').css("background-color", "rgba(97, 56, 224, 0.5)");
+            $('.block-2').fadeIn(500);
 
         },
 

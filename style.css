@@ -9,7 +9,7 @@ body {
 	height: 100%;
 	color: white;
 	font-size: 20px;	
-	background-image: url(Flat-Mountains.svg); 
+	background-image: url(img/Flat-Mountains.svg);
 	background-size: cover;
 }
 
@@ -101,3 +101,8 @@ select {
 	margin-bottom: 5px;
 	vertical-align: center;
 }
+
+.block-2 {
+	display: none;
+}
+

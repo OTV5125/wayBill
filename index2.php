@@ -90,10 +90,10 @@ $balance = $mysql->getBalance();
     <div class="wrapper-items block-2">
         <div class="wrapper-item">
             <div class="petrol-list">
-                Старый пробег: <input class="input-petrol-list old-mileage" placeholder="<?= $balance['mileage'] ?>">
+                Старый пробег: <input disabled class="input-petrol-list old-mileage" placeholder="<?= $balance['mileage'] ?>">
                 км. <br>
                 Новый пробег <span data-value="BT45" class="new-mileage"></span>км. <br>
-                Остаток в начале дня: <input class="input-petrol-list start-day-petrol"
+                Остаток в начале дня: <input disabled class="input-petrol-list start-day-petrol"
                                              placeholder="<?= $balance['balance'] ?>"> л. <br>
                 Остаток в конце дня: <span class="finish-day-petrol"> </span> л. <br>
                 Дата последней заправки <span class="last-date-petrol"><?= $balance['last_date'] ?></span><br>
@@ -107,7 +107,7 @@ $balance = $mysql->getBalance();
             <div class="select-routes">
                 <div><span class="title">Первый путевой лист</span></div>
                 <br>
-                <input type="number" class="input-select-routes number-list" value="1"> Номер путевого листа <br><br>
+                <input type="number" disabled class="input-select-routes number-list" value="1"> Номер путевого листа <br><br>
                 <input type="number" class="input-select-routes input-petrol"> Бензина залил <br><br>
                 <input type="date" class="input-select-routes input-petrol-date"> Дата заправки<br>
                 <br>
