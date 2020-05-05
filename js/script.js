@@ -105,8 +105,8 @@
                     if(select[i].dataset.id > 0){
                         km = Number(select[i].dataset.km);
                         sum += km;
-                            // console.log(select[i].dataset.id);
-                            // console.log($(select[i]).parent().parent().find("input[type='checkbox']")[0].checked);
+                        // console.log(select[i].dataset.id);
+                        // console.log($(select[i]).parent().parent().find("input[type='checkbox']")[0].checked);
                     }
                 }
                 let sumKm = newKm - sum;
