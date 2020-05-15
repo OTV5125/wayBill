@@ -70,15 +70,47 @@ $balance = $mysql->getBalance();
         }
     }
 
-    class SelectRoutes extends React.Component {
+    class SelectRoutes1 extends React.Component {
+        state = {
+            petrol: ""
+        };
+
+        handlerPetrolChange = (e) => {
+            e.preventDefault();
+            this.setState(() => {
+                // Важно: используем `state` вместо `this.state` при обновлении.
+                return { petrol: e.currentTarget.value }
+            });
+            this.props.updateDate(this.state.petrol);
+        }
+        // petrolChange (e) {
+        //
+        //     this.setState((e) => {
+        //         // Важно: используем `state` вместо `this.state` при обновлении.
+        //         return { petrol: e.currentTarget.value }
+        //     });
+        //     // this.setState({ petrol: e.currentTarget.value });
+        //
+        //     // console.log(this.state.petrol)
+        // };
+
         render() {
+            const {petrol} = this.state;
             return(
                 <div className="wrapper-item">
                     <div className="select-routes">
                         <div><span className="title">Первый путевой лист</span></div>
                         <br />
-                            <input type="number" className="input-select-routes number-list" /> Номер путевого листа <br /><br />
-                            <input type="number" className="input-select-routes input-petrol" /> Бензина залил <br /><br />
+                            <input
+                                type="number"
+                                className="input-select-routes number-list"
+                            /> Номер путевого листа <br /><br />
+                            <input
+                                type="number"
+                                className="input-select-routes input-petrol"
+                                onChange={this.handlerPetrolChange.bind(this)}
+                                value={petrol}
+                            /> Бензина залил <br /><br />
                             <input type="date" className="input-select-routes input-petrol-date" /> Дата заправки<br />
                             <br />
                             <input type="date" className="input-select-routes new-date-list" /> Дата путевого листа<br /><br />
@@ -104,6 +136,13 @@ $balance = $mysql->getBalance();
     }
 
     class App  extends React.Component{
+        state = {
+            petrol: ''
+        };
+        updateDate = (value) => {
+            this.setState({petrol: value});
+
+        };
         render() {
             return (
                 <React.Fragment>
@@ -111,7 +150,7 @@ $balance = $mysql->getBalance();
                     <div className="wrapper">
                         <div className="wrapper-items block-1">
                             <PetrolList1/>
-                            <SelectRoutes/>
+                            <SelectRoutes1 updateDate={this.updateDate}/>
                         </div>
                     </div>
                 </React.Fragment>
