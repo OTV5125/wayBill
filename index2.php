@@ -45,13 +45,35 @@ $balance = $mysql->getBalance();
 
 <script type="text/babel">
 
+
     class PetrolList1 extends React.Component {
-        state  = {
-            newMileage: "",
-            finishDayPetrol: ""
-        };
+        constructor (props) {
+            super(props);
+            this.state = {
+                newMileage: "",
+                finishDayPetrol: "",
+                allPetrol: <?= $balance['balance'] ?>,
+                restKM: "<?= round($balance['balance'] / (11 / 100)) ?>"
+            };
+        }
+
+        static getDerivedStateFromProps( props ){
+            if( (props.addPetrol) && (props.addPetrol>=0)){
+                let addPetrol = props.addPetrol*1
+                let restKM = addPetrol*Math.round(100/11);
+                let newAllPetrol = Math.floor((<?= $balance['balance'] ?>*1 + addPetrol)*100)/100;
+                let newRestKM = <?= round($balance['balance'] / (11 / 100)) ?>*1 + restKM;
+                return {
+                    allPetrol: newAllPetrol,
+                    restKM: newRestKM
+                }
+            }
+            return null;
+        }
+
+
         render() {
-            const {newMileage,finishDayPetrol} = this.state;
+            const {newMileage,finishDayPetrol,allPetrol, restKM} = this.state;
             return(
                 <div className="wrapper-item">
                     <div className="petrol-list">
@@ -62,8 +84,8 @@ $balance = $mysql->getBalance();
                                                      placeholder="<?= $balance['balance'] ?>"/> л. <br />
                         Остаток в конце дня: <span className="finish-day-petrol"> {finishDayPetrol} </span> л. <br />
                         Дата последней заправки <span className="last-date-petrol"><?= $balance['last_date'] ?></span><br />
-                        Всего бензина <span className="sum-petrol" data-value="BT38"><?= $balance['balance'] ?></span> л.<br />
-                        Осталось километров <span className="rest-km"><?= round($balance['balance'] / (11 / 100)) ?></span> км.<br />
+                        Всего бензина <span className="sum-petrol" data-value="BT38"> {allPetrol} </span> л.<br />
+                        Осталось километров <span className="rest-km"> {restKM} </span> км.<br />
                     </div>
                 </div>
             )
@@ -71,31 +93,17 @@ $balance = $mysql->getBalance();
     }
 
     class SelectRoutes1 extends React.Component {
-        state = {
-            petrol: ""
-        };
-
-        handlerPetrolChange = (e) => {
-            e.preventDefault();
-            this.setState(() => {
-                // Важно: используем `state` вместо `this.state` при обновлении.
-                return { petrol: e.currentTarget.value }
-            });
-            this.props.updateDate(this.state.petrol);
-        }
-        // petrolChange (e) {
-        //
-        //     this.setState((e) => {
-        //         // Важно: используем `state` вместо `this.state` при обновлении.
-        //         return { petrol: e.currentTarget.value }
-        //     });
-        //     // this.setState({ petrol: e.currentTarget.value });
-        //
-        //     // console.log(this.state.petrol)
+        // state = {
+        //     petrol: ""
         // };
 
+        handlerPetrolChange = (e) => {
+            let petrol = e.currentTarget.value;
+            this.props.updateDate(petrol);
+        };
+
+
         render() {
-            const {petrol} = this.state;
             return(
                 <div className="wrapper-item">
                     <div className="select-routes">
@@ -108,8 +116,8 @@ $balance = $mysql->getBalance();
                             <input
                                 type="number"
                                 className="input-select-routes input-petrol"
-                                onChange={this.handlerPetrolChange.bind(this)}
-                                value={petrol}
+                                onChange={this.handlerPetrolChange}
+                                //value={petrol}
                             /> Бензина залил <br /><br />
                             <input type="date" className="input-select-routes input-petrol-date" /> Дата заправки<br />
                             <br />
@@ -137,19 +145,19 @@ $balance = $mysql->getBalance();
 
     class App  extends React.Component{
         state = {
-            petrol: ''
+            addPetrol: ''
         };
         updateDate = (value) => {
-            this.setState({petrol: value});
-
+            this.setState({addPetrol: value});
         };
         render() {
+            const {addPetrol} = this.state;
             return (
                 <React.Fragment>
                     <h1>Сервис посчитаем бензин</h1>
                     <div className="wrapper">
                         <div className="wrapper-items block-1">
-                            <PetrolList1/>
+                            <PetrolList1 addPetrol = {addPetrol}/>
                             <SelectRoutes1 updateDate={this.updateDate}/>
                         </div>
                     </div>
