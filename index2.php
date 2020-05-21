@@ -47,6 +47,7 @@ $balance = $mysql->getBalance();
         constructor (props) {
             super(props);
             this.state = {
+                memoryProps: this.props,
                 newMileage: "",
                 finishDayPetrol: "",
                 petrolDate: "<?= $balance['last_date'] ?>",
@@ -55,7 +56,7 @@ $balance = $mysql->getBalance();
             };
         }
 
-        static getDerivedStateFromProps( props ){
+        static getDerivedStateFromProps(props, state){
             if( (props.addPetrol) && (props.addPetrol>=0)){
                 let addPetrol = props.addPetrol*1
                 let restKM = addPetrol*Math.round(100/11);
@@ -65,7 +66,7 @@ $balance = $mysql->getBalance();
                     allPetrol: newAllPetrol,
                     restKM: newRestKM
                 }
-            } else if (props.petrolDate) {
+            } else if (props.petrolDate !== state.memoryProps.petrolDate) {
                 let originDate = props.petrolDate.split('-');
                 let date = originDate.reverse().join('-');
                 return {
@@ -96,6 +97,26 @@ $balance = $mysql->getBalance();
     }
 
     class SelectRoutes1 extends React.Component {
+
+        constructor(props) {
+            super(props);
+            this.addChild = this.addChild.bind(this);
+            this.state = {
+                components: [
+                    {
+                        id:1, name: 'Some Name'
+                    }
+                ]
+            }
+        }
+
+        addChild() {
+            this.setState({
+                components: this.state.components.concat([
+               {id:2,name:"Another Name"}
+               ])
+            });
+        }
 
         handlerInputChange = (e) => {
             let data = e.currentTarget.value;
@@ -133,22 +154,34 @@ $balance = $mysql->getBalance();
                                    onChange={this.handlerInputChange}
                             /> Дата путевого листа<br /><br />
                             <div className="checkbox-list">
-                                <div className="checkbox-list-items">
-                                    <select>
-                                        <option data-id="0">не выбрано</option>
-                                        <?php foreach ($routes AS $route): ?>
-                                        <option data-id="<?= $route[0] ?>" data-km="<?= $route[3] ?>"><?= $route[1] ?>
-                                            - <?= $route[2] ?> (<?= $route[3] ?>км)
-                                        </option>
-                                        <?php endforeach; ?>
-                                    </select> <input type="checkbox" /> в обратную сторону
-                                </div>
+                                { // здесь будет отрисовано необходимое кол-во компонентов
+                                    this.state.components.map((item) => (
+                                        <SelectBlock1 key={item.id} name={item.name}/>
+                                    ))
+                                }
                             </div>
-                                <button className="add-route">Добавить маршрут</button>
+                                <button onClick={this.addChild}>Добавить маршрут</button>
                                 <button className="save">сохранить</button>
                                 <button className="get-doc">получить документ</button>
                     </div>
                 </div>
+            )
+        }
+    }
+
+    class SelectBlock1 extends React.Component {
+        render () {
+            return (
+            <div className="checkbox-list-items">
+                <select>
+                    <option data-id="0">не выбрано</option>
+                    <?php foreach ($routes AS $route): ?>
+                    <option data-id="<?= $route[0] ?>" data-km="<?= $route[3] ?>"><?= $route[1] ?>
+                        - <?= $route[2] ?> (<?= $route[3] ?>км)
+                    </option>
+                    <?php endforeach; ?>
+                </select> <input type="checkbox" /> в обратную сторону
+            </div>
             )
         }
     }
@@ -170,11 +203,13 @@ $balance = $mysql->getBalance();
                 this.setState({
                     addPetrol: value
                 });
-            } else if(name === "input-petrol-date") {
+            }
+            if(name === "input-petrol-date") {
                 this.setState({
                     petrolDate: value
                 });
-            } else if(name === "new-date-list") {
+            }
+            if(name === "new-date-list") {
                 let firstDate = new Date(value);
                 let secondDate = new Date(this.state.petrolDate)
                 if ( firstDate < secondDate ) {
