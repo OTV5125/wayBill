@@ -47,7 +47,7 @@ $balance = $mysql->getBalance();
         constructor (props) {
             super(props);
             this.state = {
-                memoryProps: this.props,
+                addPetrol: "",
                 newMileage: "",
                 finishDayPetrol: "",
                 petrolDate: "<?= $balance['last_date'] ?>",
@@ -57,16 +57,17 @@ $balance = $mysql->getBalance();
         }
 
         static getDerivedStateFromProps(props, state){
-            if( (props.addPetrol) && (props.addPetrol>=0)){
+            if((props.addPetrol) && (props.addPetrol !== state.addPetrol) && (props.addPetrol>=0)){
                 let addPetrol = props.addPetrol*1
                 let restKM = addPetrol*Math.round(100/11);
                 let newAllPetrol = Math.floor((<?= $balance['balance'] ?>*1 + addPetrol)*100)/100;
                 let newRestKM = <?= round($balance['balance'] / (11 / 100)) ?>*1 + restKM;
                 return {
                     allPetrol: newAllPetrol,
-                    restKM: newRestKM
+                    restKM: newRestKM,
+                    addPetrol: props.addPetrol
                 }
-            } else if (props.petrolDate !== state.memoryProps.petrolDate) {
+            } else if ((props.petrolDate) && (props.petrolDate !== state.petrolDate)) {
                 let originDate = props.petrolDate.split('-');
                 let date = originDate.reverse().join('-');
                 return {
