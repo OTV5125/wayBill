@@ -101,20 +101,21 @@ $balance = $mysql->getBalance();
 
         constructor(props) {
             super(props);
-            this.addChild = this.addChild.bind(this);
+            this.addSelect = this.addSelect.bind(this);
             this.state = {
-                components: [
+                counterSelects: 1,
+                selects: [
                     {
-                        id:1, name: 'Some Name'
+                        id:1
                     }
                 ]
             }
         }
 
-        addChild() {
+        addSelect() {
             this.setState({
-                components: this.state.components.concat([
-               {id:2,name:"Another Name"}
+                selects: this.state.selects.concat([
+               {id: ++this.state.counterSelects}
                ])
             });
         }
@@ -156,12 +157,12 @@ $balance = $mysql->getBalance();
                             /> Дата путевого листа<br /><br />
                             <div className="checkbox-list">
                                 { // здесь будет отрисовано необходимое кол-во компонентов
-                                    this.state.components.map((item) => (
-                                        <SelectBlock1 key={item.id} name={item.name}/>
+                                    this.state.selects.map((item) => (
+                                        <SelectBlock1 key={item.id}/>
                                     ))
                                 }
                             </div>
-                                <button onClick={this.addChild}>Добавить маршрут</button>
+                                <button onClick={this.addSelect}>Добавить маршрут</button>
                                 <button className="save">сохранить</button>
                                 <button className="get-doc">получить документ</button>
                     </div>
@@ -175,7 +176,7 @@ $balance = $mysql->getBalance();
             return (
             <div className="checkbox-list-items">
                 <select>
-                    <option data-id="0">не выбрано</option>
+                    <option data-id="0">Не выбрано</option>
                     <?php foreach ($routes AS $route): ?>
                     <option data-id="<?= $route[0] ?>" data-km="<?= $route[3] ?>"><?= $route[1] ?>
                         - <?= $route[2] ?> (<?= $route[3] ?>км)
