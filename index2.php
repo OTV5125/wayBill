@@ -106,7 +106,8 @@ $balance = $mysql->getBalance();
                 counterSelects: 1,
                 selects: [
                     {
-                        id:1
+                        id:1,
+                        dataKM: ""
                     }
                 ]
             }
@@ -115,7 +116,8 @@ $balance = $mysql->getBalance();
         addSelect() {
             this.setState({
                 selects: this.state.selects.concat([
-               {id: ++this.state.counterSelects}
+               {id: ++this.state.counterSelects,
+               dataKM: ""}
                ])
             });
         }
