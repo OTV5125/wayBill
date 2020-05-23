@@ -42,7 +42,7 @@ $balance = $mysql->getBalance();
 </div>
 
 <script type="text/babel">
-
+    // верхний блок (с результатами)
     class PetrolList1 extends React.Component {
         constructor (props) {
             super(props);
@@ -76,7 +76,6 @@ $balance = $mysql->getBalance();
             }
             return null;
         }
-
         render() {
             const {newMileage,finishDayPetrol, petrolDate, allPetrol, restKM} = this.state;
             return(
@@ -96,17 +95,18 @@ $balance = $mysql->getBalance();
             )
         }
     }
-
+    // Нижний блок с полями ввода
     class SelectRoutes1 extends React.Component {
-
         constructor(props) {
             super(props);
             this.addSelect = this.addSelect.bind(this);
+            // this.handlerSelect = this.handlerSelect.bind(this);
             this.state = {
                 counterSelects: 1,
+                // в рамках приложения данные свойства необязательны (сделано для будущего)
                 selects: [
                     {
-                        id:1,
+                        id: 1,
                         dataKM: ""
                     }
                 ]
@@ -121,6 +121,20 @@ $balance = $mysql->getBalance();
                ])
             });
         }
+        // В рамках приложения необязательно менять state для каждого select (сделано для будущего)
+        handlerSelect = (e) => {
+            let data = e.target.value*1;
+            let id = e.target.id*1;
+            let selects = JSON.parse(JSON.stringify(this.state.selects));
+            for (let obj of selects) {
+                if(obj.id === id) {
+                    obj.dataKM = data;
+                }
+            }
+            this.setState({
+                selects: selects
+            })
+        };
 
         handlerInputChange = (e) => {
             let data = e.currentTarget.value;
@@ -160,7 +174,7 @@ $balance = $mysql->getBalance();
                             <div className="checkbox-list">
                                 { // здесь будет отрисовано необходимое кол-во компонентов
                                     this.state.selects.map((item) => (
-                                        <SelectBlock1 key={item.id}/>
+                                        <SelectBlock1 key={item.id} id={item.id} handlerSelect={this.handlerSelect}/>
                                     ))
                                 }
                             </div>
@@ -172,15 +186,15 @@ $balance = $mysql->getBalance();
             )
         }
     }
-
+    // Блок селектов
     class SelectBlock1 extends React.Component {
         render () {
             return (
             <div className="checkbox-list-items">
-                <select>
-                    <option data-id="0">Не выбрано</option>
+                <select onChange={this.props.handlerSelect} id={this.props.id}>
+                    <option id="0" value="0">Не выбрано</option>
                     <?php foreach ($routes AS $route): ?>
-                    <option data-id="<?= $route[0] ?>" data-km="<?= $route[3] ?>"><?= $route[1] ?>
+                    <option id="<?= $route[0] ?>" value="<?= $route[3] ?>"><?= $route[1] ?>
                         - <?= $route[2] ?> (<?= $route[3] ?>км)
                     </option>
                     <?php endforeach; ?>
