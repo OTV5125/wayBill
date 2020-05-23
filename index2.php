@@ -48,6 +48,8 @@ $balance = $mysql->getBalance();
             super(props);
             this.state = {
                 addPetrol: "",
+                addKM: 0,
+                oldMileage: <?= $balance['mileage'] ?>,
                 newMileage: "",
                 finishDayPetrol: "",
                 petrolDate: "<?= $balance['last_date'] ?>",
@@ -73,23 +75,27 @@ $balance = $mysql->getBalance();
                 return {
                     petrolDate: date
                 }
+            } else if ((props.addKM) && (props.addKM !== state.addKM)) {
+                return {
+                    newMileage: state.oldMileage + props.addKM
+                }
             }
             return null;
         }
         render() {
-            const {newMileage,finishDayPetrol, petrolDate, allPetrol, restKM} = this.state;
+            const {newMileage,finishDayPetrol, petrolDate, allPetrol, restKM, oldMileage} = this.state;
             return(
                 <div className="wrapper-item">
                     <div className="petrol-list">
-                        Старый пробег: <input className="input-petrol-list old-mileage" placeholder="<?= $balance['mileage'] ?>"/>
+                        Старый пробег: <input className="input-petrol-list" placeholder={oldMileage}/>
                         км. <br />
-                        Новый пробег <span data-value="BT45" className="new-mileage">{newMileage}</span> км. <br />
-                        Остаток в начале дня: <input className="input-petrol-list start-day-petrol"
+                        Новый пробег <span>{newMileage}</span> км. <br />
+                        Остаток в начале дня: <input className="input-petrol-list"
                                                      placeholder="<?= $balance['balance'] ?>"/> л. <br />
-                        Остаток в конце дня: <span className="finish-day-petrol"> {finishDayPetrol} </span> л. <br />
-                        Дата последней заправки <span className="last-date-petrol"> {petrolDate} </span><br />
-                        Всего бензина <span className="sum-petrol" data-value="BT38"> {allPetrol} </span> л.<br />
-                        Осталось километров <span className="rest-km"> {restKM} </span> км.<br />
+                        Остаток в конце дня: <span> {finishDayPetrol} </span> л. <br />
+                        Дата последней заправки <span> {petrolDate} </span><br />
+                        Всего бензина <span> {allPetrol} </span> л.<br />
+                        Осталось километров <span> {restKM} </span> км.<br />
                     </div>
                 </div>
             )
@@ -103,7 +109,6 @@ $balance = $mysql->getBalance();
             // this.handlerSelect = this.handlerSelect.bind(this);
             this.state = {
                 counterSelects: 1,
-                // в рамках приложения данные свойства необязательны (сделано для будущего)
                 selects: [
                     {
                         id: 1,
@@ -121,7 +126,7 @@ $balance = $mysql->getBalance();
                ])
             });
         }
-        // В рамках приложения необязательно менять state для каждого select (сделано для будущего)
+
         handlerSelect = (e) => {
             let data = e.target.value*1;
             let id = e.target.id*1;
@@ -132,9 +137,18 @@ $balance = $mysql->getBalance();
                 }
             }
             this.setState({
-                selects: selects
-            })
+                selects: selects,
+                addKM: this.state.addKM + data
+            });
+            let addKM = 0;
+            let name = "select-block";
+            for (let obj of selects) {
+                addKM = addKM + obj.dataKM;
+            }
+            this.props.updateData(addKM,name);
+
         };
+
 
         handlerInputChange = (e) => {
             let data = e.currentTarget.value;
@@ -174,7 +188,7 @@ $balance = $mysql->getBalance();
                             <div className="checkbox-list">
                                 { // здесь будет отрисовано необходимое кол-во компонентов
                                     this.state.selects.map((item) => (
-                                        <SelectBlock1 key={item.id} id={item.id} handlerSelect={this.handlerSelect}/>
+                                        <SelectBlock1 name="select-block" key={item.id} id={item.id} handlerSelect={this.handlerSelect}/>
                                     ))
                                 }
                             </div>
@@ -187,11 +201,10 @@ $balance = $mysql->getBalance();
         }
     }
     // Блок селектов
-    class SelectBlock1 extends React.Component {
-        render () {
+    function SelectBlock1(props) {
             return (
             <div className="checkbox-list-items">
-                <select onChange={this.props.handlerSelect} id={this.props.id}>
+                <select onChange={props.handlerSelect} id={props.id}>
                     <option id="0" value="0">Не выбрано</option>
                     <?php foreach ($routes AS $route): ?>
                     <option id="<?= $route[0] ?>" value="<?= $route[3] ?>"><?= $route[1] ?>
@@ -201,11 +214,12 @@ $balance = $mysql->getBalance();
                 </select> <input type="checkbox" /> в обратную сторону
             </div>
             )
-        }
+
     }
 
     class App  extends React.Component{
         state = {
+            addKM: '',
             numberList: '',
             addPetrol: '',
             petrolDate: '',
@@ -238,15 +252,24 @@ $balance = $mysql->getBalance();
                     alert("Дата путевого листа должна быть больше даты последней заправки");
                 }
             }
+            if (name === "select-block") {
+                this.setState({
+                    addKM: value
+                });
+            }
         };
         render() {
-            const {addPetrol, petrolDate} = this.state;
+            const {addPetrol, petrolDate,addKM} = this.state;
             return (
                 <React.Fragment>
                     <h1>Сервис посчитаем бензин</h1>
                     <div className="wrapper">
                         <div className="wrapper-items block-1">
-                            <PetrolList1 addPetrol = {addPetrol} petrolDate = {petrolDate}/>
+                            <PetrolList1
+                                addPetrol = {addPetrol}
+                                petrolDate = {petrolDate}
+                                addKM = {addKM}
+                            />
                             <SelectRoutes1 updateData={this.updateData}/>
                         </div>
                     </div>
