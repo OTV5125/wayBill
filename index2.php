@@ -60,10 +60,14 @@ $balance = $mysql->getBalance();
         }
 
         static getDerivedStateFromProps(props, state){
+            // Добавление маршрутов
             if((props.addPetrol) && (props.addPetrol !== state.addPetrol) && (props.addPetrol>=0)){
+                // Берем разницу между существующим заправленным бензином (от стейта) и новым
                 let addPetrol = props.addPetrol*1 - state.addPetrol;
+                // Такая конструкция нужна для округления до 2 знаков после запятой
                 let newAllPetrol = Math.floor((state.allPetrol + addPetrol)*100)/100;
                 let newFinishDayPetrol = Math.floor((state.finishDayPetrol+addPetrol)*100)/100;
+                // Вычисляем остаток километров на основании бензина в конце дня
                 let newRestKM = Math.floor((newFinishDayPetrol*100)/11);
                 return {
                     allPetrol: newAllPetrol,
@@ -71,17 +75,22 @@ $balance = $mysql->getBalance();
                     addPetrol: props.addPetrol,
                     finishDayPetrol: newFinishDayPetrol
                 }
+                // Изменям дату заправки
             } else if ((props.petrolDate) && (props.petrolDate !== state.petrolDate)) {
                 return {
                     petrolDate: props.petrolDate
                 }
+                // Изменяем километраж
             } else if (((props.addKM) || (props.addKM === 0)) && (props.addKM !== state.addKM)) {
+                // Вычисляем остаток километров на основании всего бензина
                 let newRestKM = Math.floor((state.allPetrol*100)/11) - props.addKM*1;
                 if (newRestKM < 0) {
                     alert("Превышено число километров")
                 }
+                // На основании нового остатка вычисляем новый баланс бензина
                 let newPetrolBalance = Math.floor(((newRestKM*11)/100)*100)/100;
                 return {
+                    // Вычисляем новый пробег
                     newMileage: state.oldMileage + props.addKM,
                     restKM: newRestKM,
                     addKM: props.addKM,
@@ -114,8 +123,8 @@ $balance = $mysql->getBalance();
         constructor(props) {
             super(props);
             this.addSelect = this.addSelect.bind(this);
-            // this.handlerSelect = this.handlerSelect.bind(this);
             this.state = {
+                // Данный счетчик нужен для формирования id селектов
                 counterSelects: 1,
                 selects: [
                     {
@@ -138,6 +147,7 @@ $balance = $mysql->getBalance();
         handlerSelect = (e) => {
             let data = e.target.value*1;
             let id = e.target.id*1;
+            // Так как ссылку на стейт нельзя использовать, выбрана такая конструкция
             let selects = JSON.parse(JSON.stringify(this.state.selects));
             for (let obj of selects) {
                 if(obj.id === id) {
@@ -245,6 +255,7 @@ $balance = $mysql->getBalance();
                 });
             }
             if(name === "input-petrol-date") {
+                // Конвертируем дату
                 let originDate = value.split('-');
                 let date = originDate.reverse().join('-');
                 this.setState({
@@ -253,7 +264,7 @@ $balance = $mysql->getBalance();
             }
             if(name === "new-date-list") {
                 let firstDate = new Date(value);
-                let secondDate = new Date(this.state.petrolDate)
+                let secondDate = new Date(this.state.petrolDate);
                 if ( firstDate < secondDate ) {
                     this.setState({
                         newDateList: value
