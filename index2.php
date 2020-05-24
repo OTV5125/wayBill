@@ -72,10 +72,8 @@ $balance = $mysql->getBalance();
                     finishDayPetrol: newFinishDayPetrol
                 }
             } else if ((props.petrolDate) && (props.petrolDate !== state.petrolDate)) {
-                let originDate = props.petrolDate.split('-');
-                let date = originDate.reverse().join('-');
                 return {
-                    petrolDate: date
+                    petrolDate: props.petrolDate
                 }
             } else if (((props.addKM) || (props.addKM === 0)) && (props.addKM !== state.addKM)) {
                 let newRestKM = Math.floor((state.allPetrol*100)/11) - props.addKM*1;
@@ -247,8 +245,10 @@ $balance = $mysql->getBalance();
                 });
             }
             if(name === "input-petrol-date") {
+                let originDate = value.split('-');
+                let date = originDate.reverse().join('-');
                 this.setState({
-                    petrolDate: value
+                    petrolDate: date
                 });
             }
             if(name === "new-date-list") {
