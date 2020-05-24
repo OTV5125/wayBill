@@ -50,8 +50,9 @@ $balance = $mysql->getBalance();
                 addPetrol: "",
                 addKM: 0,
                 oldMileage: <?= $balance['mileage'] ?>,
-                newMileage: "",
-                finishDayPetrol: "",
+                newMileage: <?= $balance['mileage'] ?>,
+                startDayPetrol: <?= $balance['balance'] ?>,
+                finishDayPetrol: <?= $balance['balance'] ?>,
                 petrolDate: "<?= $balance['last_date'] ?>",
                 allPetrol: <?= $balance['balance'] ?>,
                 restKM: "<?= round($balance['balance'] / (11 / 100)) ?>"
@@ -60,14 +61,15 @@ $balance = $mysql->getBalance();
 
         static getDerivedStateFromProps(props, state){
             if((props.addPetrol) && (props.addPetrol !== state.addPetrol) && (props.addPetrol>=0)){
-                let addPetrol = props.addPetrol*1
-                let restKM = addPetrol*Math.round(100/11);
-                let newAllPetrol = Math.floor((<?= $balance['balance'] ?>*1 + addPetrol)*100)/100;
-                let newRestKM = <?= round($balance['balance'] / (11 / 100)) ?>*1 + restKM;
+                let addPetrol = props.addPetrol*1 - state.addPetrol;
+                let newAllPetrol = Math.floor((state.allPetrol + addPetrol)*100)/100;
+                let newFinishDayPetrol = Math.floor((state.finishDayPetrol+addPetrol)*100)/100;
+                let newRestKM = Math.floor((newFinishDayPetrol*100)/11);
                 return {
                     allPetrol: newAllPetrol,
                     restKM: newRestKM,
-                    addPetrol: props.addPetrol
+                    addPetrol: props.addPetrol,
+                    finishDayPetrol: newFinishDayPetrol
                 }
             } else if ((props.petrolDate) && (props.petrolDate !== state.petrolDate)) {
                 let originDate = props.petrolDate.split('-');
@@ -75,15 +77,23 @@ $balance = $mysql->getBalance();
                 return {
                     petrolDate: date
                 }
-            } else if ((props.addKM) && (props.addKM !== state.addKM)) {
+            } else if (((props.addKM) || (props.addKM === 0)) && (props.addKM !== state.addKM)) {
+                let newRestKM = Math.floor((state.allPetrol*100)/11) - props.addKM*1;
+                if (newRestKM < 0) {
+                    alert("Превышено число километров")
+                }
+                let newPetrolBalance = Math.floor(((newRestKM*11)/100)*100)/100;
                 return {
-                    newMileage: state.oldMileage + props.addKM
+                    newMileage: state.oldMileage + props.addKM,
+                    restKM: newRestKM,
+                    addKM: props.addKM,
+                    finishDayPetrol: newPetrolBalance
                 }
             }
             return null;
         }
         render() {
-            const {newMileage,finishDayPetrol, petrolDate, allPetrol, restKM, oldMileage} = this.state;
+            const {newMileage,finishDayPetrol, startDayPetrol, petrolDate, allPetrol, restKM, oldMileage} = this.state;
             return(
                 <div className="wrapper-item">
                     <div className="petrol-list">
@@ -91,7 +101,7 @@ $balance = $mysql->getBalance();
                         км. <br />
                         Новый пробег <span>{newMileage}</span> км. <br />
                         Остаток в начале дня: <input className="input-petrol-list"
-                                                     placeholder="<?= $balance['balance'] ?>"/> л. <br />
+                                                     placeholder={startDayPetrol}/> л. <br />
                         Остаток в конце дня: <span> {finishDayPetrol} </span> л. <br />
                         Дата последней заправки <span> {petrolDate} </span><br />
                         Всего бензина <span> {allPetrol} </span> л.<br />
@@ -112,7 +122,7 @@ $balance = $mysql->getBalance();
                 selects: [
                     {
                         id: 1,
-                        dataKM: ""
+                        dataKM: 0
                     }
                 ]
             }
@@ -347,7 +357,7 @@ $balance = $mysql->getBalance();
 <!--            </div>-->
 <!--        </div>-->
 <!--    </div>-->
-</div>
+<!--</div>-->
 </body>
 </html>
 
