@@ -129,7 +129,8 @@ $balance = $mysql->getBalance();
                 selects: [
                     {
                         id: 1,
-                        dataKM: 0
+                        dataKM: 0,
+                        returnRace: false
                     }
                 ]
             }
@@ -139,7 +140,8 @@ $balance = $mysql->getBalance();
             this.setState({
                 selects: this.state.selects.concat([
                {id: ++this.state.counterSelects,
-               dataKM: ""}
+               dataKM: "",
+               returnRace: false}
                ])
             });
         }
@@ -162,6 +164,32 @@ $balance = $mysql->getBalance();
             let name = "select-block";
             for (let obj of selects) {
                 addKM = addKM + obj.dataKM;
+            }
+            this.props.updateData(addKM,name);
+
+        };
+
+        handlerCheckboxChange = (e) => {
+            let id = e.target.id*1;
+            // Так как ссылку на стейт нельзя использовать, выбрана такая конструкция
+            console.log(id);
+            let selects = JSON.parse(JSON.stringify(this.state.selects));
+            for (let obj of selects) {
+                if(obj.id === id) {
+                    obj.returnRace = !obj.returnRace;
+                }
+            }
+            this.setState({
+                selects: selects
+            });
+            let addKM = 0;
+            let name = "select-block";
+            for (let obj of selects) {
+                if(obj.returnRace) {
+                    addKM = addKM + obj.dataKM*2;
+                } else {
+                    addKM = addKM + obj.dataKM
+                }
             }
             this.props.updateData(addKM,name);
 
@@ -206,7 +234,12 @@ $balance = $mysql->getBalance();
                             <div className="checkbox-list">
                                 { // здесь будет отрисовано необходимое кол-во компонентов
                                     this.state.selects.map((item) => (
-                                        <SelectBlock1 name="select-block" key={item.id} id={item.id} handlerSelect={this.handlerSelect}/>
+                                        <SelectBlock1 name="select-block"
+                                                      key={item.id}
+                                                      id={item.id}
+                                                      handlerSelect={this.handlerSelect}
+                                                      handlerCheckboxChange = {this.handlerCheckboxChange}
+                                        />
                                     ))
                                 }
                             </div>
@@ -229,7 +262,7 @@ $balance = $mysql->getBalance();
                         - <?= $route[2] ?> (<?= $route[3] ?>км)
                     </option>
                     <?php endforeach; ?>
-                </select> <input type="checkbox" /> в обратную сторону
+                </select> <input onChange={props.handlerCheckboxChange} id={props.id} type="checkbox" /> в обратную сторону
             </div>
             )
 
