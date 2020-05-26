@@ -255,19 +255,31 @@ $balance = $mysql->getBalance();
                 });
             }
             if(name === "input-petrol-date") {
-                // Конвертируем дату
-                let originDate = value.split('-');
-                let date = originDate.reverse().join('-');
-                this.setState({
-                    petrolDate: date
-                });
+                let firstDate = new Date(value);
+                let secondDate = new Date(this.state.newDateList.split('-').reverse().join("-"));
+                if (!this.state.newDateList.trim()) {
+                    this.setState({
+                        petrolDate: value.split('-').reverse().join("-")
+                    });
+                } else if ( firstDate < secondDate) {
+                    this.setState({
+                        petrolDate: value.split('-').reverse().join("-")
+                    });
+                } else  {
+                    alert("Дата путевого листа должна быть больше даты последней заправки");
+                }
             }
             if(name === "new-date-list") {
+                // Нужно будет упростить
                 let firstDate = new Date(value);
-                let secondDate = new Date(this.state.petrolDate);
-                if ( firstDate < secondDate ) {
+                let secondDate = new Date(this.state.petrolDate.split('-').reverse().join("-"));
+                if (!this.state.petrolDate.trim()) {
                     this.setState({
-                        newDateList: value
+                        newDateList: value.split('-').reverse().join("-")
+                    });
+                } else if ( firstDate > secondDate ) {
+                    this.setState({
+                        newDateList: value.split('-').reverse().join("-")
                     });
                 } else  {
                     alert("Дата путевого листа должна быть больше даты последней заправки");
